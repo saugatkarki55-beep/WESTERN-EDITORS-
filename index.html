@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WESTERN EDITORS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #0d0d0d;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --gold-accent: #d4af37;
+            --gold-hover: #f3e5ab;
+            --text-white: #ffffff;
+            --text-muted: #a0a0a0;
+            --fb-blue: #1877f2;
+            --tiktok-pink: #ff0050;
+            --tiktok-blue: #00f2fe;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+        }
+
+        /* Container Layout */
+        .container {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Section */
+        header {
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--text-white);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .divider {
+            height: 1px;
+            width: 60px;
+            background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+            margin: 0 auto 16px auto;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--gold-accent);
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        /* Links / Buttons Section */
+        .links-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 18px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: var(--card-bg);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn i {
+            font-size: 1.4rem;
+            margin-right: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Facebook Specific Styling */
+        .btn-facebook .fa-facebook {
+            color: var(--fb-blue);
+        }
+
+        /* TikTok Specific Styling */
+        .btn-tiktok .fa-tiktok {
+            color: var(--text-white);
+            text-shadow: -1px -1px 0 var(--tiktok-pink), 1px 1px 0 var(--tiktok-blue);
+        }
+
+        /* Hover & Tap Effects */
+        .btn:hover, .btn:active {
+            transform: translateY(-3px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .btn:hover i, .btn:active i {
+            transform: scale(1.15);
+        }
+
+        /* Subtle Glow Overlay */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 480px) {
+            .brand-name {
+                font-size: 1.8rem;
+                letter-spacing: 3px;
+            }
+
+            .tagline {
+                font-size: 0.75rem;
+                letter-spacing: 1.5px;
+            }
+
+            .btn {
+                padding: 16px 20px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <header>
+            <h1 class="brand-name">Western Editors</h1>
+            <div class="divider"></div>
+            <p class="tagline">Professional Photo &bull; Cinematic Video &bull; Drone Coverage</p>
+        </header>
+
+        <section class="links-container">
+            <a href="https://www.facebook.com/share/1Fsm7AVcDf/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="btn btn-facebook">
+                <i class="fa-brands fa-facebook"></i>
+                <span>Follow us on Facebook</span>
+            </a>
+
+            <a href="https://www.tiktok.com/@westerneditorsofficial?_r=1&_t=ZS-99OFlWix6eN" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok">
+                <i class="fa-brands fa-tiktok"></i>
+                <span>Follow us on TikTok</span>
+            </a>
+        </section>
+    </main>
+
+    <script>
+        // Touch feedback optimization for mobile users scanning QR codes
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            button.addEventListener('touchend', function() {
+                this.style.transform = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
