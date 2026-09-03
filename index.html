@@ -297,7 +297,7 @@
     <main class="container">
         <header>
             <div class="logo-wrapper">
-                <img src="logo.png" alt="Western Editors Logo" class="logo-img" id="main-logo">
+                <img src="logo.png" alt="Western Editors Logo" class="logo-img">
             </div>
             <h1 class="brand-name">Western Editors</h1>
             <div class="divider"></div>
@@ -319,21 +319,7 @@
 
     <script>
         /* ------------------------------------
-           1. Logo Smart Path Resolver
-        ------------------------------------ */
-        const logoImg = document.getElementById('main-logo');
-        const possiblePaths = ['logo.png', 'logo.png.png', 'logo.jpg', 'logo.jpeg', 'LOGO.PNG'];
-        let currentTry = 0;
-
-        logoImg.onerror = function() {
-            currentTry++;
-            if (currentTry < possiblePaths.length) {
-                this.src = possiblePaths[currentTry];
-            }
-        };
-
-        /* ------------------------------------
-           2. Strict Admin View Control
+           1. Strict Admin View Control
         ------------------------------------ */
         const urlParams = new URLSearchParams(window.location.search);
         localStorage.removeItem('isAdmin');
@@ -346,7 +332,7 @@
         }
 
         /* ------------------------------------
-           3. Mobile Touch Event Listeners
+           2. Mobile Touch Event Listeners
         ------------------------------------ */
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('touchstart', function() {
@@ -358,7 +344,7 @@
         });
 
         /* ------------------------------------
-           4. Click Tracking Event Listeners
+           3. Click Tracking Event Listeners
         ------------------------------------ */
         document.getElementById('fb-btn').addEventListener('click', function() {
             if (window.goatcounter && window.goatcounter.count) {
@@ -368,3 +354,160 @@
                     event: true
                 });
             }
+        });
+
+        document.getElementById('tt-btn').addEventListener('click', function() {
+            if (window.goatcounter && window.goatcounter.count) {
+                window.goatcounter.count({
+                    path: 'click-tiktok',
+                    title: 'TikTok Clicked',
+                    event: true
+                });
+            }
+        });
+
+        /* ------------------------------------
+           4. Analytics API Fetching
+        ------------------------------------ */
+        async function fetchLiveStats() {
+            try {
+                const totalRes = await fetch('https://westerneditors.goatcounter.com/counter/TOTAL.json');
+                const totalData = await totalRes.json();
+                document.getElementById('visit-count').innerText = totalData.count || '0';
+
+                const fbRes = await fetch('https://westerneditors.goatcounter.com/counter/click-facebook.json');
+                const ttRes = await fetch('https://westerneditors.goatcounter.com/counter/click-tiktok.json');
+                
+                let fbClicks = 0;
+                let ttClicks = 0;
+
+                if (fbRes.ok) {
+                    const fbData = await fbRes.json();
+                    fbClicks = parseInt(fbData.count) || 0;
+                }
+                if (ttRes.ok) {
+                    const ttData = await ttRes.json();
+                    ttClicks = parseInt(ttData.count) || 0;
+                }
+
+                document.getElementById('click-count').innerText = (fbClicks + ttClicks);
+            } catch (err) {
+                document.getElementById('visit-count').innerText = '1+';
+                document.getElementById('click-count').innerText = '0';
+            }
+        }
+
+        /* ------------------------------------
+           5. Advanced Dynamic Particle Canvas
+        ------------------------------------ */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 55;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let mouse = {
+            x: null,
+            y: null,
+            radius: 120
+        };
+
+        window.addEventListener('mousemove', function(e) {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseleave', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 162, 255, ' : 'rgba(0, 242, 254, ';
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+                if (mouse.x && mouse.y) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius) {
+                        this.x -= dx * 0.02;
+                        this.y -= dy * 0.02;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.opacity + ')';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(0, 162, 255, 0.8)';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a + 1; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 110) {
+                        let opacity = 1 - (distance / 110);
+                        ctx.strokeStyle = `rgba(0, 162, 255, ${opacity * 0.18})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+    </script>
+</body>
+</html>
