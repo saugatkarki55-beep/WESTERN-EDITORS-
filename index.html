@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WESTERN EDITORS</title>
+
+    <!-- Background Analytics Tracking (GoatCounter) -->
+    <script data-goatcounter="https://westerneditors.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+    <!-- Font Awesome for Social Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Reset & Variables */
         * {
             margin: 0;
             padding: 0;
@@ -18,12 +23,12 @@
         }
 
         :root {
-            --bg-color: #0d0d0d;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --gold-accent: #d4af37;
-            --gold-hover: #f3e5ab;
+            --bg-color: #06090e;
+            --card-bg: rgba(12, 22, 38, 0.55);
+            --blue-accent: #00a2ff;
+            --blue-glow: #0066ff;
             --text-white: #ffffff;
-            --text-muted: #a0a0a0;
+            --text-muted: #8ea5c0;
             --fb-blue: #1877f2;
             --tiktok-pink: #ff0050;
             --tiktok-blue: #00f2fe;
@@ -38,11 +43,78 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+                radial-gradient(circle at 50% 18%, rgba(0, 162, 255, 0.22) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.15) 0%, transparent 55%),
+                radial-gradient(circle at 10% 90%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
         }
 
-        /* Container Layout */
+        /* Particle Canvas Styling */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Overlay Grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Top Right Real-Time Stats (Hidden for Clients by Default) */
+        .stats-badge {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 20, 35, 0.85);
+            border: 1px solid rgba(0, 162, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 14px;
+            border-radius: 20px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 162, 255, 0.25);
+            z-index: 10;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stats-item i {
+            color: var(--blue-accent);
+        }
+
+        .stats-item span {
+            color: var(--text-white);
+            font-weight: 700;
+        }
+
+        /* Main Container Layout */
         .container {
             width: 100%;
             max-width: 440px;
@@ -50,42 +122,74 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 1;
         }
 
-        /* Header Section */
+        /* Header Layout */
         header {
-            margin-bottom: 40px;
+            margin-bottom: 35px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Logo Circle Wrapper */
+        .logo-wrapper {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--blue-accent), #0033aa, var(--tiktok-blue));
+            box-shadow: 0 0 35px rgba(0, 162, 255, 0.5);
+            margin-bottom: 20px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .logo-wrapper:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 162, 255, 0.7);
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            background-color: #000;
         }
 
         .brand-name {
             font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
+            font-size: 2.1rem;
             font-weight: 700;
             letter-spacing: 4px;
             color: var(--text-white);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 25px rgba(0, 162, 255, 0.5);
         }
 
         .divider {
-            height: 1px;
-            width: 60px;
-            background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
-            margin: 0 auto 16px auto;
+            height: 2px;
+            width: 70px;
+            background: linear-gradient(90deg, transparent, var(--blue-accent), transparent);
+            margin: 0 auto 14px auto;
+            border-radius: 2px;
         }
 
         .tagline {
-            font-size: 0.85rem;
-            font-weight: 300;
+            font-size: 0.82rem;
+            font-weight: 500;
             letter-spacing: 2px;
-            color: var(--gold-accent);
+            color: var(--blue-accent);
             text-transform: uppercase;
             line-height: 1.6;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
         }
 
-        /* Links / Buttons Section */
+        /* Buttons Section */
         .links-container {
             width: 100%;
             display: flex;
@@ -99,17 +203,17 @@
             justify-content: center;
             width: 100%;
             padding: 18px 24px;
-            border-radius: 12px;
+            border-radius: 14px;
             text-decoration: none;
             color: var(--text-white);
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 0.5px;
             background: var(--card-bg);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 162, 255, 0.28);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
@@ -122,30 +226,26 @@
             transition: transform 0.3s ease;
         }
 
-        /* Facebook Specific Styling */
         .btn-facebook .fa-facebook {
             color: var(--fb-blue);
         }
 
-        /* TikTok Specific Styling */
         .btn-tiktok .fa-tiktok {
             color: var(--text-white);
             text-shadow: -1px -1px 0 var(--tiktok-pink), 1px 1px 0 var(--tiktok-blue);
         }
 
-        /* Hover & Tap Effects */
         .btn:hover, .btn:active {
             transform: translateY(-3px);
-            border-color: var(--gold-accent);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
-            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--blue-accent);
+            box-shadow: 0 10px 30px rgba(0, 162, 255, 0.4);
+            background: rgba(18, 38, 68, 0.7);
         }
 
         .btn:hover i, .btn:active i {
-            transform: scale(1.15);
+            transform: scale(1.18);
         }
 
-        /* Subtle Glow Overlay */
         .btn::after {
             content: '';
             position: absolute;
@@ -153,24 +253,28 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transition: 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(0, 162, 255, 0.2), transparent);
+            transition: 0.6s;
         }
 
         .btn:hover::after {
             left: 100%;
         }
 
-        /* Mobile Optimization */
         @media (max-width: 480px) {
+            .logo-wrapper {
+                width: 110px;
+                height: 110px;
+            }
+
             .brand-name {
-                font-size: 1.8rem;
+                font-size: 1.75rem;
                 letter-spacing: 3px;
             }
 
             .tagline {
-                font-size: 0.75rem;
-                letter-spacing: 1.5px;
+                font-size: 0.72rem;
+                letter-spacing: 1.4px;
             }
 
             .btn {
@@ -182,20 +286,38 @@
 </head>
 <body>
 
+    <!-- Particle Animation Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Top Right Real-Time Stats (Admin View Only) -->
+    <div class="stats-badge" id="admin-badge">
+        <div class="stats-item">
+            <i class="fa-regular fa-eye"></i> Visits: <span id="visit-count">...</span>
+        </div>
+        <div class="stats-item">
+            <i class="fa-solid fa-arrow-pointer"></i> Followed: <span id="click-count">...</span>
+        </div>
+    </div>
+
     <main class="container">
+        <!-- Header -->
         <header>
+            <div class="logo-wrapper">
+                <img src="logo.png.png" alt="Western Editors Logo" class="logo-img">
+            </div>
             <h1 class="brand-name">Western Editors</h1>
             <div class="divider"></div>
             <p class="tagline">Professional Photo &bull; Cinematic Video &bull; Drone Coverage</p>
         </header>
 
+        <!-- Social Media Links -->
         <section class="links-container">
-            <a href="https://www.facebook.com/share/1Fsm7AVcDf/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="btn btn-facebook">
+            <a href="https://www.facebook.com/share/1Fsm7AVcDf/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" id="fb-btn">
                 <i class="fa-brands fa-facebook"></i>
                 <span>Follow us on Facebook</span>
             </a>
 
-            <a href="https://www.tiktok.com/@westerneditorsofficial?_r=1&_t=ZS-99OFlWix6eN" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok">
+            <a href="https://www.tiktok.com/@westerneditorsofficial?_r=1&_t=ZS-99OFlWix6eN" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" id="tt-btn">
                 <i class="fa-brands fa-tiktok"></i>
                 <span>Follow us on TikTok</span>
             </a>
@@ -203,7 +325,19 @@
     </main>
 
     <script>
-        // Touch feedback optimization for mobile users scanning QR codes
+        /* ------------------------------------
+           1. Secret Admin Mode Logic
+        ------------------------------------ */
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('admin') === 'true' || localStorage.getItem('isAdmin') === 'true') {
+            document.getElementById('admin-badge').style.display = 'flex';
+            localStorage.setItem('isAdmin', 'true');
+            fetchLiveStats();
+        }
+
+        /* ------------------------------------
+           2. Mobile Touch Event Listeners
+        ------------------------------------ */
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('touchstart', function() {
                 this.style.transform = 'scale(0.98)';
@@ -212,6 +346,172 @@
                 this.style.transform = 'none';
             });
         });
+
+        /* ------------------------------------
+           3. Click Tracking Event Listeners
+        ------------------------------------ */
+        document.getElementById('fb-btn').addEventListener('click', function() {
+            if (window.goatcounter && window.goatcounter.count) {
+                window.goatcounter.count({
+                    path: 'click-facebook',
+                    title: 'Facebook Clicked',
+                    event: true
+                });
+            }
+        });
+
+        document.getElementById('tt-btn').addEventListener('click', function() {
+            if (window.goatcounter && window.goatcounter.count) {
+                window.goatcounter.count({
+                    path: 'click-tiktok',
+                    title: 'TikTok Clicked',
+                    event: true
+                });
+            }
+        });
+
+        /* ------------------------------------
+           4. Analytics API Fetching
+        ------------------------------------ */
+        async function fetchLiveStats() {
+            try {
+                const totalRes = await fetch('https://westerneditors.goatcounter.com/counter/TOTAL.json');
+                const totalData = await totalRes.json();
+                document.getElementById('visit-count').innerText = totalData.count || '0';
+
+                const fbRes = await fetch('https://westerneditors.goatcounter.com/counter/click-facebook.json');
+                const ttRes = await fetch('https://westerneditors.goatcounter.com/counter/click-tiktok.json');
+                
+                let fbClicks = 0;
+                let ttClicks = 0;
+
+                if (fbRes.ok) {
+                    const fbData = await fbRes.json();
+                    fbClicks = parseInt(fbData.count) || 0;
+                }
+                if (ttRes.ok) {
+                    const ttData = await ttRes.json();
+                    ttClicks = parseInt(ttData.count) || 0;
+                }
+
+                document.getElementById('click-count').innerText = (fbClicks + ttClicks);
+            } catch (err) {
+                document.getElementById('visit-count').innerText = '1+';
+                document.getElementById('click-count').innerText = '0';
+            }
+        }
+
+        /* ------------------------------------
+           5. Advanced Dynamic Particle Canvas
+        ------------------------------------ */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 55;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let mouse = {
+            x: null,
+            y: null,
+            radius: 120
+        };
+
+        window.addEventListener('mousemove', function(e) {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseleave', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.color = Math.random() > 0.5 ? 'rgba(0, 162, 255, ' : 'rgba(0, 242, 254, ';
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+                if (mouse.x && mouse.y) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius) {
+                        this.x -= dx * 0.02;
+                        this.y -= dy * 0.02;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.opacity + ')';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(0, 162, 255, 0.8)';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a + 1; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 110) {
+                        let opacity = 1 - (distance / 110);
+                        ctx.strokeStyle = `rgba(0, 162, 255, ${opacity * 0.18})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
     </script>
 </body>
 </html>
