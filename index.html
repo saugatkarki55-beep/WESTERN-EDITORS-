@@ -222,7 +222,6 @@
             text-transform: uppercase;
             transform: translateZ(35px);
             
-            /* Professional Gradient Shine */
             background: linear-gradient(
                 120deg, 
                 #f0f4f8 0%, 
@@ -334,20 +333,21 @@
 
         .btn:hover i { transform: scale(1.2) rotate(-3deg); }
 
-        /* FIXED: High Priority Full-Screen Modal Overlay */
+        /* FIXED: Mobile & 3D Layering Overwrite Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(2, 4, 10, 0.92);
+            background: rgba(2, 4, 10, 0.94);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999; /* Completely hides background elements */
+            z-index: 999999 !important;
+            transform: translateZ(9999px); /* Brings modal in front on Mobile 3D contexts */
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.4s ease;
