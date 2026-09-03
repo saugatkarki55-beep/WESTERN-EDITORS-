@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WESTERN EDITORS</title>
 
+    <!-- Analytics Tracking (GoatCounter) -->
     <script data-goatcounter="https://westerneditors.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -347,7 +350,7 @@
             justify-content: center;
             align-items: center;
             z-index: 999999 !important;
-            transform: translateZ(9999px); /* Brings modal in front on Mobile 3D contexts */
+            transform: translateZ(9999px);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.4s ease;
@@ -443,14 +446,17 @@
 </head>
 <body>
 
+    <!-- Particle Canvas & Custom Cursor Canvas -->
     <canvas id="particle-canvas"></canvas>
     <canvas id="cursor-canvas"></canvas>
 
+    <!-- Custom Ambient Audio Toggle Button -->
     <div class="audio-toggle" id="audio-btn">
         <i class="fa-solid fa-volume-xmark" id="audio-icon"></i>
         <span id="audio-text">AMBIENT: OFF</span>
     </div>
 
+    <!-- Top Right Real-Time Stats (Admin View Only) -->
     <div class="stats-badge" id="admin-badge">
         <div class="stats-item">
             <i class="fa-regular fa-eye"></i> Visits: <span id="visit-count">...</span>
@@ -460,7 +466,9 @@
         </div>
     </div>
 
+    <!-- 3D Main Wrapper Container -->
     <main class="container" id="card-container">
+        <!-- Header -->
         <header>
             <div class="logo-wrapper" id="logo-btn" title="Click for Interactive Message">
                 <img src="logo.png" alt="Western Editors Logo" class="logo-img">
@@ -470,6 +478,7 @@
             <p class="tagline">Professional Photo &bull; Cinematic Video &bull; Drone Coverage</p>
         </header>
 
+        <!-- Social Links -->
         <section class="links-container">
             <a href="https://www.facebook.com/share/1Fsm7AVcDf/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" id="fb-btn">
                 <i class="fa-brands fa-facebook"></i>
@@ -483,6 +492,7 @@
         </section>
     </main>
 
+    <!-- Modal Overlay -->
     <div class="modal-overlay" id="thankyou-modal">
         <div class="modal-card">
             <div class="modal-icon">
@@ -681,10 +691,44 @@
         animateCursorParticles();
 
         /* ------------------------------------
-           5. Strict Admin View Control
+           5. Click Tracking & Haptic Feedback
+        ------------------------------------ */
+        function triggerHaptic() {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(15); // iPhone style light haptic pulse
+            }
+        }
+
+        function trackClick(type) {
+            triggerHaptic();
+
+            // LocalStorage Counter
+            let totalClicks = parseInt(localStorage.getItem('we_total_clicks') || '0');
+            totalClicks += 1;
+            localStorage.setItem('we_total_clicks', totalClicks);
+
+            // GoatCounter Event Trigger
+            if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+                window.goatcounter.count({
+                    path: 'click-' + type,
+                    title: type.toUpperCase() + ' Clicked',
+                    event: true
+                });
+            }
+        }
+
+        document.getElementById('fb-btn').addEventListener('click', function() {
+            trackClick('facebook');
+        });
+
+        document.getElementById('tt-btn').addEventListener('click', function() {
+            trackClick('tiktok');
+        });
+
+        /* ------------------------------------
+           6. Strict Admin View Control & Stats
         ------------------------------------ */
         const urlParams = new URLSearchParams(window.location.search);
-        localStorage.removeItem('isAdmin');
 
         if (urlParams.get('admin') === 'true') {
             document.getElementById('admin-badge').style.display = 'flex';
@@ -693,38 +737,20 @@
             document.getElementById('admin-badge').style.display = 'none';
         }
 
-        /* ------------------------------------
-           6. Click Analytics Tracking
-        ------------------------------------ */
-        document.getElementById('fb-btn').addEventListener('click', function() {
-            if (window.goatcounter && window.goatcounter.count) {
-                window.goatcounter.count({ path: 'click-facebook', title: 'Facebook Clicked', event: true });
-            }
-        });
-
-        document.getElementById('tt-btn').addEventListener('click', function() {
-            if (window.goatcounter && window.goatcounter.count) {
-                window.goatcounter.count({ path: 'click-tiktok', title: 'TikTok Clicked', event: true });
-            }
-        });
-
         async function fetchLiveStats() {
+            let clicks = localStorage.getItem('we_total_clicks') || '0';
+            document.getElementById('click-count').innerText = clicks;
+
             try {
                 const totalRes = await fetch('https://westerneditors.goatcounter.com/counter/TOTAL.json');
-                const totalData = await totalRes.json();
-                document.getElementById('visit-count').innerText = totalData.count || '0';
-
-                const fbRes = await fetch('https://westerneditors.goatcounter.com/counter/click-facebook.json');
-                const ttRes = await fetch('https://westerneditors.goatcounter.com/counter/click-tiktok.json');
-                
-                let fbClicks = 0, ttClicks = 0;
-                if (fbRes.ok) fbClicks = parseInt((await fbRes.json()).count) || 0;
-                if (ttRes.ok) ttClicks = parseInt((await ttRes.json()).count) || 0;
-
-                document.getElementById('click-count').innerText = (fbClicks + ttClicks);
+                if (totalRes.ok) {
+                    const totalData = await totalRes.json();
+                    document.getElementById('visit-count').innerText = totalData.count || '1';
+                } else {
+                    document.getElementById('visit-count').innerText = '1+';
+                }
             } catch (err) {
                 document.getElementById('visit-count').innerText = '1+';
-                document.getElementById('click-count').innerText = '0';
             }
         }
 
