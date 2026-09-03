@@ -289,7 +289,7 @@
     <!-- Particle Animation Canvas -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Top Right Real-Time Stats (Admin View Only) -->
+    <!-- Top Right Real-Time Stats (Only visible when URL has ?admin=true) -->
     <div class="stats-badge" id="admin-badge">
         <div class="stats-item">
             <i class="fa-regular fa-eye"></i> Visits: <span id="visit-count">...</span>
@@ -303,7 +303,7 @@
         <!-- Header -->
         <header>
             <div class="logo-wrapper">
-                <img src="logo.png.png" alt="Western Editors Logo" class="logo-img">
+                <img src="logo.png" alt="Western Editors Logo" class="logo-img" id="main-logo" onerror="this.onerror=null; this.src='logo.png.png';">
             </div>
             <h1 class="brand-name">Western Editors</h1>
             <div class="divider"></div>
@@ -326,13 +326,19 @@
 
     <script>
         /* ------------------------------------
-           1. Secret Admin Mode Logic
+           1. Strict Admin View Control
         ------------------------------------ */
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('admin') === 'true' || localStorage.getItem('isAdmin') === 'true') {
+        
+        // Clear previous forced admin states
+        localStorage.removeItem('isAdmin');
+
+        // Only show stats badge if ?admin=true is explicitly in URL
+        if (urlParams.get('admin') === 'true') {
             document.getElementById('admin-badge').style.display = 'flex';
-            localStorage.setItem('isAdmin', 'true');
             fetchLiveStats();
+        } else {
+            document.getElementById('admin-badge').style.display = 'none';
         }
 
         /* ------------------------------------
@@ -493,7 +499,7 @@
                         ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.lineTo(particlesArray[a].x, particlesArray[a].y);
                         ctx.stroke();
                     }
                 }
