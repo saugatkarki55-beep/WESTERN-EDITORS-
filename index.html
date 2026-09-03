@@ -53,16 +53,18 @@
             background-attachment: fixed;
         }
 
-        /* Background Particle Canvas */
-        #particle-canvas {
+        /* Particle & Cursor Canvas */
+        #particle-canvas, #cursor-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
         }
+
+        #particle-canvas { z-index: 0; }
+        #cursor-canvas { z-index: 99; }
 
         /* Grid Overlay */
         body::before {
@@ -77,6 +79,41 @@
             background-size: 40px 40px;
             pointer-events: none;
             z-index: 0;
+        }
+
+        /* Audio Ambient Toggle Button */
+        .audio-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 20, 35, 0.85);
+            border: 1px solid rgba(0, 162, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 10px 16px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-white);
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.8), 0 0 12px rgba(0, 162, 255, 0.2);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .audio-toggle:hover {
+            border-color: var(--red-glow);
+            box-shadow: 0 8px 25px rgba(255, 0, 60, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .audio-toggle i {
+            font-size: 1rem;
+            color: var(--red-glow);
         }
 
         /* Top Right Real-Time Stats (Admin View Only) */
@@ -137,7 +174,7 @@
             transform-style: preserve-3d;
         }
 
-        /* 3D Interactive Floating Logo Ring */
+        /* 3D Floating Logo */
         .logo-wrapper {
             width: 135px;
             height: 135px;
@@ -184,7 +221,7 @@
             pointer-events: none;
         }
 
-        /* 3D Extruded Brand Title with Internal Red Light Sweep */
+        /* Brand Title with Internal Metallic Red Shine Sweep */
         .brand-name {
             font-family: 'Cinzel', serif;
             font-size: 2.1rem;
@@ -193,9 +230,7 @@
             margin-bottom: 10px;
             text-transform: uppercase;
             transform: translateZ(35px);
-            position: relative;
             
-            /* Internal Metallic Gradient Text Base */
             background: linear-gradient(
                 110deg, 
                 #ffffff 0%, 
@@ -209,8 +244,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             animation: redShineSweep 3.5s linear infinite;
-            
-            /* Outer Glowing Perspective Dropshadow */
             filter: drop-shadow(0 4px 10px rgba(255, 0, 60, 0.5));
         }
 
@@ -229,7 +262,6 @@
             box-shadow: 0 0 12px var(--red-glow);
         }
 
-        /* Subtitle */
         .tagline {
             font-size: 0.82rem;
             font-weight: 600;
@@ -241,7 +273,7 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 12px rgba(0, 162, 255, 0.5);
         }
 
-        /* 3D Buttons Container */
+        /* 3D Buttons */
         .links-container {
             width: 100%;
             display: flex;
@@ -250,7 +282,6 @@
             transform-style: preserve-3d;
         }
 
-        /* 3D Physical Push Button */
         .btn {
             display: flex;
             align-items: center;
@@ -284,10 +315,7 @@
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
-        .btn-facebook .fa-facebook {
-            color: var(--fb-blue);
-        }
-
+        .btn-facebook .fa-facebook { color: var(--fb-blue); }
         .btn-tiktok .fa-tiktok {
             color: var(--text-white);
             filter: drop-shadow(-2px 0 0 var(--tiktok-pink)) drop-shadow(2px 0 0 var(--tiktok-blue));
@@ -311,13 +339,9 @@
                 inset 0 2px 4px rgba(0, 0, 0, 0.6);
         }
 
-        .btn:hover i {
-            transform: scale(1.2) rotate(-3deg);
-        }
+        .btn:hover i { transform: scale(1.2) rotate(-3deg); }
 
-        /* ------------------------------------
-           Cinematic 3D Popup Modal Overlay
-        ------------------------------------ */
+        /* Modal Pop-up */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -408,42 +432,26 @@
             transition: all 0.2s ease;
         }
 
-        .modal-close-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 0, 60, 0.7);
-        }
-
         @media (max-width: 480px) {
-            .logo-wrapper {
-                width: 115px;
-                height: 115px;
-            }
-
-            .brand-name {
-                font-size: 1.7rem;
-                letter-spacing: 3px;
-            }
-
-            .tagline {
-                font-size: 0.74rem;
-                letter-spacing: 1.4px;
-            }
-
-            .btn {
-                padding: 16px 20px;
-                font-size: 0.95rem;
-            }
-
-            .modal-title {
-                font-size: 1.15rem;
-            }
+            .logo-wrapper { width: 115px; height: 115px; }
+            .brand-name { font-size: 1.7rem; letter-spacing: 3px; }
+            .tagline { font-size: 0.74rem; letter-spacing: 1.4px; }
+            .btn { padding: 16px 20px; font-size: 0.95rem; }
+            .audio-toggle { top: 15px; left: 15px; padding: 8px 12px; font-size: 0.68rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Particle Canvas -->
+    <!-- Particle Canvas & Custom Cursor Canvas -->
     <canvas id="particle-canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+
+    <!-- Custom Ambient Audio Toggle Button -->
+    <div class="audio-toggle" id="audio-btn">
+        <i class="fa-solid fa-volume-xmark" id="audio-icon"></i>
+        <span id="audio-text">AMBIENT: OFF</span>
+    </div>
 
     <!-- Top Right Real-Time Stats (Admin View Only) -->
     <div class="stats-badge" id="admin-badge">
@@ -481,7 +489,7 @@
         </section>
     </main>
 
-    <!-- Cinematic Pop-Up Modal -->
+    <!-- Modal Overlay -->
     <div class="modal-overlay" id="thankyou-modal">
         <div class="modal-card">
             <div class="modal-icon">
@@ -495,21 +503,76 @@
 
     <script>
         /* ------------------------------------
-           1. Web Audio API Cinematic Sound Engine
+           1. Web Audio Ambient Sound Synthesizer
         ------------------------------------ */
+        let audioCtx = null;
+        let ambientOsc1 = null;
+        let ambientOsc2 = null;
+        let ambientGain = null;
+        let isAudioPlaying = false;
+
+        const audioBtn = document.getElementById('audio-btn');
+        const audioIcon = document.getElementById('audio-icon');
+        const audioText = document.getElementById('audio-text');
+
+        function initAmbientAudio() {
+            AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+
+            // Low frequency rumble synth
+            ambientOsc1 = audioCtx.createOscillator();
+            ambientOsc2 = audioCtx.createOscillator();
+            ambientGain = audioCtx.createGain();
+
+            ambientOsc1.type = 'sine';
+            ambientOsc1.frequency.setValueAtTime(45, audioCtx.currentTime); // 45Hz Deep Rumble
+
+            ambientOsc2.type = 'triangle';
+            ambientOsc2.frequency.setValueAtTime(90, audioCtx.currentTime); // Harmonic drone
+
+            // Volume control
+            ambientGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+
+            ambientOsc1.connect(ambientGain);
+            ambientOsc2.connect(ambientGain);
+            ambientGain.connect(audioCtx.destination);
+
+            ambientOsc1.start();
+            ambientOsc2.start();
+        }
+
+        audioBtn.addEventListener('click', () => {
+            if (!audioCtx) initAmbientAudio();
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (!isAudioPlaying) {
+                ambientGain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 1.5);
+                audioIcon.className = 'fa-solid fa-volume-high';
+                audioIcon.style.color = '#00a2ff';
+                audioText.innerText = 'AMBIENT: ON';
+                isAudioPlaying = true;
+            } else {
+                ambientGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                audioIcon.className = 'fa-solid fa-volume-xmark';
+                audioIcon.style.color = '#ff003c';
+                audioText.innerText = 'AMBIENT: OFF';
+                isAudioPlaying = false;
+            }
+        });
+
+        // Click Stinger Sound
         function playCinematicSound() {
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const audioCtx = new AudioContext();
-
-                // Synth Low Bass Riser
+                if (!audioCtx) initAmbientAudio();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
 
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(60, audioCtx.currentTime); // Low freq
-                osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.4); // Riser pitch
+                osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.4);
 
                 gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.25, audioCtx.currentTime + 0.1);
@@ -520,13 +583,11 @@
 
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.6);
-            } catch (e) {
-                // Audio context fallback
-            }
+            } catch (e) {}
         }
 
         /* ------------------------------------
-           2. Logo Click Pop-Up Modal Handlers
+           2. Logo Pop-up Modal Handlers
         ------------------------------------ */
         const logoBtn = document.getElementById('logo-btn');
         const modal = document.getElementById('thankyou-modal');
@@ -537,21 +598,15 @@
             modal.classList.add('active');
         });
 
-        modalClose.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-
+        modalClose.addEventListener('click', () => modal.classList.remove('active'));
         modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
+            if (e.target === modal) modal.classList.remove('active');
         });
 
         /* ------------------------------------
            3. Mouse 3D Tilt Effect
         ------------------------------------ */
         const card = document.getElementById('card-container');
-        
         document.addEventListener('mousemove', (e) => {
             if (window.innerWidth > 768) {
                 const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
@@ -559,13 +614,84 @@
                 card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             }
         });
-
         document.addEventListener('mouseleave', () => {
             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
         });
 
         /* ------------------------------------
-           4. Strict Admin View Control
+           4. Custom 3D Cursor Trailing Glow Engine
+        ------------------------------------ */
+        const cursorCanvas = document.getElementById('cursor-canvas');
+        const cCtx = cursorCanvas.getContext('2d');
+        
+        let cursorParticles = [];
+
+        function resizeCursorCanvas() {
+            cursorCanvas.width = window.innerWidth;
+            cursorCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCursorCanvas);
+        resizeCursorCanvas();
+
+        class CursorParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 4;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.color = Math.random() > 0.5 ? 'rgba(255, 0, 60, ' : 'rgba(0, 162, 255, ';
+                this.life = 1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.94;
+                this.life -= 0.035;
+            }
+
+            draw() {
+                if (this.life <= 0) return;
+                cCtx.beginPath();
+                cCtx.arc(this.x, this.y, Math.max(0, this.size), 0, Math.PI * 2);
+                cCtx.fillStyle = this.color + this.life + ')';
+                cCtx.shadowBlur = 12;
+                cCtx.shadowColor = 'rgba(0, 162, 255, 0.8)';
+                cCtx.fill();
+                cCtx.shadowBlur = 0;
+            }
+        }
+
+        function handlePointerMove(e) {
+            const x = e.clientX || (e.touches && e.touches[0].clientX);
+            const y = e.clientY || (e.touches && e.touches[0].clientY);
+            if (x && y) {
+                for (let i = 0; i < 3; i++) {
+                    cursorParticles.push(new CursorParticle(x, y));
+                }
+            }
+        }
+
+        window.addEventListener('mousemove', handlePointerMove);
+        window.addEventListener('touchmove', handlePointerMove);
+
+        function animateCursorParticles() {
+            cCtx.clearRect(0, 0, cursorCanvas.width, cursorCanvas.height);
+            for (let i = 0; i < cursorParticles.length; i++) {
+                cursorParticles[i].update();
+                cursorParticles[i].draw();
+                if (cursorParticles[i].life <= 0) {
+                    cursorParticles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateCursorParticles);
+        }
+        animateCursorParticles();
+
+        /* ------------------------------------
+           5. Strict Admin View Control
         ------------------------------------ */
         const urlParams = new URLSearchParams(window.location.search);
         localStorage.removeItem('isAdmin');
@@ -578,31 +704,20 @@
         }
 
         /* ------------------------------------
-           5. Click Analytics Tracking
+           6. Click Analytics Tracking
         ------------------------------------ */
         document.getElementById('fb-btn').addEventListener('click', function() {
             if (window.goatcounter && window.goatcounter.count) {
-                window.goatcounter.count({
-                    path: 'click-facebook',
-                    title: 'Facebook Clicked',
-                    event: true
-                });
+                window.goatcounter.count({ path: 'click-facebook', title: 'Facebook Clicked', event: true });
             }
         });
 
         document.getElementById('tt-btn').addEventListener('click', function() {
             if (window.goatcounter && window.goatcounter.count) {
-                window.goatcounter.count({
-                    path: 'click-tiktok',
-                    title: 'TikTok Clicked',
-                    event: true
-                });
+                window.goatcounter.count({ path: 'click-tiktok', title: 'TikTok Clicked', event: true });
             }
         });
 
-        /* ------------------------------------
-           6. Analytics API Fetching
-        ------------------------------------ */
         async function fetchLiveStats() {
             try {
                 const totalRes = await fetch('https://westerneditors.goatcounter.com/counter/TOTAL.json');
@@ -612,17 +727,9 @@
                 const fbRes = await fetch('https://westerneditors.goatcounter.com/counter/click-facebook.json');
                 const ttRes = await fetch('https://westerneditors.goatcounter.com/counter/click-tiktok.json');
                 
-                let fbClicks = 0;
-                let ttClicks = 0;
-
-                if (fbRes.ok) {
-                    const fbData = await fbRes.json();
-                    fbClicks = parseInt(fbData.count) || 0;
-                }
-                if (ttRes.ok) {
-                    const ttData = await ttRes.json();
-                    ttClicks = parseInt(ttData.count) || 0;
-                }
+                let fbClicks = 0, ttClicks = 0;
+                if (fbRes.ok) fbClicks = parseInt((await fbRes.json()).count) || 0;
+                if (ttRes.ok) ttClicks = parseInt((await ttRes.json()).count) || 0;
 
                 document.getElementById('click-count').innerText = (fbClicks + ttClicks);
             } catch (err) {
@@ -632,11 +739,10 @@
         }
 
         /* ------------------------------------
-           7. Background Particle Canvas
+           7. Background Particles
         ------------------------------------ */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-
         let particlesArray = [];
         const numberOfParticles = 55;
 
@@ -646,22 +752,6 @@
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-
-        let mouse = {
-            x: null,
-            y: null,
-            radius: 120
-        };
-
-        window.addEventListener('mousemove', function(e) {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        window.addEventListener('mouseleave', function() {
-            mouse.x = null;
-            mouse.y = null;
-        });
 
         class Particle {
             constructor() {
@@ -677,19 +767,8 @@
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-
                 if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-
-                if (mouse.x && mouse.y) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) {
-                        this.x -= dx * 0.02;
-                        this.y -= dy * 0.02;
-                    }
-                }
             }
 
             draw() {
@@ -705,9 +784,7 @@
 
         function initParticles() {
             particlesArray = [];
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
+            for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
         }
 
         function connectParticles() {
@@ -716,7 +793,6 @@
                     let dx = particlesArray[a].x - particlesArray[b].x;
                     let dy = particlesArray[a].y - particlesArray[b].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < 110) {
                         let opacity = 1 - (distance / 110);
                         ctx.strokeStyle = `rgba(0, 162, 255, ${opacity * 0.18})`;
